@@ -4,7 +4,8 @@ html { scrollbar-width: none; }
 html::-webkit-scrollbar { display: none; }
 body { margin: 0; overflow-x: hidden; overscroll-behavior-y: none; }
 #scene { position: fixed; inset: 0; display: block; width: 100vw; height: 100dvh; touch-action: pan-y; }
-#scroll-space { height: 270vh; pointer-events: none; }
+/* Match study.js: viewport + step(1.7h) * END(7.28), available before the 3D scene boots. */
+#scroll-space { height: 1337.6vh; height: 1337.6dvh; pointer-events: none; }
 #grain { position: fixed; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: multiply; }
 header { position: fixed; left: 32px; right: 32px; display: flex; pointer-events: none; z-index: 2; }
 header { top: 22px; align-items: flex-start; }
@@ -22,6 +23,19 @@ button:disabled { opacity: .4; cursor: default; }
 .hint-mouse span { display: block; width: 2px; height: 5px; margin: 4px auto 0; border-radius: 2px; background: #242821; }
 #error { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 22px; background: #f3eedb; border: 1px solid #242821; z-index: 3; font-size: 14px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+#loading {
+  position: fixed; left: 50%; bottom: 86px; z-index: 4;
+  transform: translateX(-50%);
+  padding: 8px 15px; border: 1.5px solid #242821; border-radius: 24px;
+  background: rgba(243,238,219,.94); color: #242821;
+  box-shadow: 3px 3px 0 rgba(36,40,33,.75);
+  font-family: ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size: 12px; letter-spacing: .08em; white-space: nowrap;
+  pointer-events: none;
+}
+#loading::before { content:""; display:inline-block; width:7px; height:7px; margin-right:8px; border-radius:50%; background:#d9784c; animation:loading-pulse 1s ease-in-out infinite; }
+#loading[hidden] { display: none; }
+@keyframes loading-pulse { 0%,100% { opacity:.35; transform:scale(.8); } 50% { opacity:1; transform:scale(1); } }
 @media (max-width: 600px) {
   header { left: 16px; right: 16px; }
   header { top: max(18px, env(safe-area-inset-top)); }

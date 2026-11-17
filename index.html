@@ -40,7 +40,7 @@
       <div class="contact-row"><span class="contact-platform">Status</span><span class="contact-value">开放合作与实习机会</span><span class="contact-action" aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;opacity:.55">OPEN</span></div>
       <p id="contact-status" class="sr-only" role="status" aria-live="polite"></p>
     </section>
-    <p id="loading" class="sr-only" role="status">正在展开纸片…</p>
+    <p id="loading" role="status" aria-live="polite">正在展开纸片…</p>
     <p id="error" role="alert" hidden></p>
     <div id="video-modal" hidden role="dialog" aria-modal="true" aria-label="视频播放">
       <div class="vm-backdrop"></div>
@@ -54,6 +54,14 @@
   <div id="scroll-space" aria-hidden="true"></div>
   <script src="./vendor/gsap.min.js"></script>
   <script src="./vendor/ScrollTrigger.min.js"></script>
+  <script>
+    // 先把滚动高度撑到完整章节长度。3D 场景初始化较慢时，访问者也能继续向下
+    // 滚动，而不是被默认的 270vh 卡在“首页 + 介绍”两屏。
+    (function () {
+      var h = Math.max(200, window.innerHeight);
+      document.getElementById('scroll-space').style.height = (window.innerHeight + h * 1.7 * 7.28) + 'px';
+    })();
+  </script>
   <script type="module" src="./study.js"></script>
   <script>
     // 兜底：某些浏览器直接从硬盘打开页面时会拦截 ES 模块（CORS），

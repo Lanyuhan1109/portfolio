@@ -647,7 +647,12 @@ async function init() {
       vec2 waves=vec2(glassNoise(ripple+vec2(.3,0.)),glassNoise(ripple+vec2(0.,.3)))-relief;
       normal=normalize(normal+vec3(waves*.16*(1.-smoothstep(.76,.94,edge)),0.));`);
   };
-  makeGrain(); makeBackdrop(); makeStarFloor(); makePapers(); story = createStory(scene, flock, starGlow); layout(); $('loading').hidden = true; syncPause();
+  makeGrain(); makeBackdrop(); makeStarFloor(); makePapers(); story = createStory(scene, flock, starGlow);
+  // The visitor may have scrolled while the 3D scene was booting. Carry that
+  // position into the scene instead of snapping back to the entrance.
+  const bootRange = Math.max(200, innerHeight) * 1.7 * END;
+  journey = Math.max(0, Math.min(END, window.scrollY / Math.max(1, bootRange) * END));
+  layout(); $('loading').hidden = true; syncPause();
   addEventListener('resize', layout);
   scrollJourney = createScrollJourney({
     gsap: window.gsap, ScrollTrigger: window.ScrollTrigger,
