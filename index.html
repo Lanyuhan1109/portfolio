@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3eedb">
+  <title>兰玉晗 Yuhan | Portfolio</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon-yuhan.svg?v=1">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main aria-label="穿过玻璃与星星纸片交互作品集">
+    <canvas id="scene" aria-label="划过玻璃可翻动字片，向下滚动或点击下方按钮，穿过玻璃进入星星纸片空间"></canvas>
+    <div id="grain" aria-hidden="true"></div>
+    <h1 class="sr-only">兰玉晗 Yuhan — 视觉设计 &amp; 影像剪辑作品集</h1>
+    <header>
+      <img class="signature" src="./assets/title-previews/yuhan-studio-crayon.png" alt="Yuhan 兰玉晗">
+      <img class="signature signature-night" src="./assets/title-previews/yuhan-studio-crayon.png" alt="" aria-hidden="true">
+    </header>
+    <button id="hint" type="button"><span class="hint-mouse" aria-hidden="true"><span></span></span><img class="hint-lettering" src="./assets/scroll-to-step-inside-pixel.svg" alt="scroll to step inside"></button>
+    <section id="intro" aria-label="About Yuhan" aria-hidden="true">
+      <img src="./assets/yuhan-intro-serif.png" width="1672" height="941" alt="Hey! You've arrived at the portfolio of Yuhan – a visual designer &amp; video editor, welcome you to my creative universe" draggable="false">
+    </section>
+    <section class="works" aria-label="作品展示位置">
+      <article class="work-slot work-left" aria-label="水巷寻游 展板"><img class="work-art" src="./assets/works/shuixiang.png" width="917" height="1375" alt="水巷寻游 — 平江历史街区空间与服务体验更新 展板" draggable="false"></article>
+      <article class="work-slot work-right" aria-label="巷陌寻踪 漫游平江 展板"><img class="work-art" src="./assets/works/pingjiang.png" width="917" height="1375" alt="巷陌寻踪 漫游平江 — 研究背景与场地分析 展板" draggable="false"></article>
+      <article class="work-slot work-left" aria-label="新希望 广告剪辑"><video class="work-art art-video" src="./assets/works/xinxiwang-web.mp4" autoplay muted loop playsinline preload="auto" aria-label="新希望 品牌广告剪辑"></video></article>
+      <article class="work-slot work-right" aria-label="爷爷不泡茶 广告剪辑"><video class="work-art art-video" src="./assets/works/yeye-web.mp4" autoplay muted loop playsinline preload="auto" aria-label="爷爷不泡茶 品牌广告剪辑"></video></article>
+    </section>
+    <aside class="work-labels" aria-label="作品编号与色彩">
+      <div class="work-label" aria-hidden="true" style="--swatch:#e7a3c0"><span class="work-number">01</span><span>Shuixiang</span><i class="work-swatch" aria-hidden="true"></i></div>
+      <div class="work-label" aria-hidden="true" style="--swatch:#87b79a"><span class="work-number">02</span><span>Pingjiang</span><i class="work-swatch" aria-hidden="true"></i></div>
+      <div class="work-label" aria-hidden="true" style="--swatch:#f4c85b"><span class="work-number">03</span><span>New Hope</span><i class="work-swatch" aria-hidden="true"></i></div>
+      <div class="work-label" aria-hidden="true" style="--swatch:#8fa8d0"><span class="work-number">04</span><span>Yeye Tea</span><i class="work-swatch" aria-hidden="true"></i></div>
+    </aside>
+    <section id="contact" aria-labelledby="contact-title" aria-hidden="true" inert>
+      <h2 id="contact-title">Contact me</h2>
+      <div class="contact-row"><span class="contact-platform">Email</span><a class="contact-value" href="mailto:tuski567@qq.com">tuski567@qq.com</a><button id="copy-email" class="contact-action" type="button" aria-label="复制邮箱地址">COPY</button></div>
+      <div class="contact-row"><span class="contact-platform">XiaoHongShu</span><span class="contact-value">兰玉晗</span><span class="contact-action" aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;opacity:.55">SOON</span></div>
+      <div class="contact-row"><span class="contact-platform">Status</span><span class="contact-value">开放合作与实习机会</span><span class="contact-action" aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;opacity:.55">OPEN</span></div>
+      <p id="contact-status" class="sr-only" role="status" aria-live="polite"></p>
+    </section>
+    <p id="loading" class="sr-only" role="status">正在展开纸片…</p>
+    <p id="error" role="alert" hidden></p>
+    <div id="video-modal" hidden role="dialog" aria-modal="true" aria-label="视频播放">
+      <div class="vm-backdrop"></div>
+      <div class="vm-stage">
+        <video id="vm-video" controls playsinline preload="auto"></video>
+        <button id="vm-close" type="button" aria-label="关闭视频">✕</button>
+        <p id="vm-caption"></p>
+      </div>
+    </div>
+  </main>
+  <div id="scroll-space" aria-hidden="true"></div>
+  <script src="./vendor/gsap.min.js"></script>
+  <script src="./vendor/ScrollTrigger.min.js"></script>
+  <script type="module" src="./study.js"></script>
+  <script>
+    // 兜底：某些浏览器直接从硬盘打开页面时会拦截 ES 模块（CORS），
+    // 3D 场景因此不会启动。此时给出中文指引，而不是留一片空白。
+    if (location.protocol === 'file:') {
+      setTimeout(function () {
+        if (window.__STUDY_BOOTED) return;
+        var tip = document.getElementById('error');
+        if (!tip) return;
+        tip.hidden = false;
+        tip.innerHTML = '这个作品集需要本地服务器才能运行 3D 场景。<br>' +
+          '<b>最快的方式</b>：双击同目录下的「启动作品集.bat」，浏览器会自动打开。<br>' +
+          '（也可以把整个 portfolio 文件夹拖到 Netlify / Vercel 上，用链接访问。）';
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

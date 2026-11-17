@@ -1,0 +1,108 @@
+:root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; color: #171915; background: #f3eedb; }
+* { box-sizing: border-box; }
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+body { margin: 0; overflow-x: hidden; overscroll-behavior-y: none; }
+#scene { position: fixed; inset: 0; display: block; width: 100vw; height: 100dvh; touch-action: pan-y; }
+#scroll-space { height: 270vh; pointer-events: none; }
+#grain { position: fixed; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: multiply; }
+header { position: fixed; left: 32px; right: 32px; display: flex; pointer-events: none; z-index: 2; }
+header { top: 22px; align-items: flex-start; }
+p { margin: 0; }
+.signature { width: 144px; height: auto; }
+.signature-night { position:absolute; left:0; top:0; opacity:var(--night,0); }
+button { color: inherit; font: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid #267961; outline-offset: 6px; }
+button:disabled { opacity: .4; cursor: default; }
+#hint { position: fixed; z-index: 2; bottom: 70px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 9px; width: 192px; height: 44px; padding: 0 13px; border: 1.5px solid #242821; border-radius: 28px; background: rgba(243, 238, 219, .9); color: #242821; box-shadow: 3px 3px 0 #242821; }
+#hint[hidden] { display: none; }
+#hint:hover { background: #f3eedb; }
+.hint-lettering { display: block; width: 140px; height: auto; }
+.hint-mouse { display: block; flex: 0 0 13px; width: 13px; height: 21px; border: 1.5px solid #242821; border-radius: 8px; }
+.hint-mouse span { display: block; width: 2px; height: 5px; margin: 4px auto 0; border-radius: 2px; background: #242821; }
+#error { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 22px; background: #f3eedb; border: 1px solid #242821; z-index: 3; font-size: 14px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 600px) {
+  header { left: 16px; right: 16px; }
+  header { top: max(18px, env(safe-area-inset-top)); }
+  .signature { width: 78px; }
+  #hint { bottom: max(86px, env(safe-area-inset-bottom)); }
+}
+
+/* Preserve the supplied artwork proportions; depth motion stays on the slot. */
+.works { position:fixed; inset:0; pointer-events:none; }
+.work-slot { --art-height:68dvh; position:absolute; width:max-content; top:50%; left:50%; opacity:0; visibility:hidden; transform-origin:center; will-change:transform,opacity; }
+.work-slot[aria-hidden="false"] { pointer-events:auto; }
+.work-art { display:block; width:auto; height:auto; max-width:35vw; max-height:var(--art-height); transform-origin:center; }
+/* Show only the interior rectangle of the supplied 514 x 666 JPEG.
+   Cropping is display-only: the original asset stays intact. */
+.art-crop { position:relative; width:min(446px,35vw,calc(var(--art-height) * 446 / 606)); aspect-ratio:446 / 606; overflow:hidden; }
+.art-crop img { position:absolute; width:115.246637%; height:auto; left:-7.623318%; top:-4.950495%; max-width:none; }
+/* Landscape film clips need more width than the portrait boards. */
+.work-art.art-video { max-width:44vw; max-height:46dvh; }
+@media(max-width:700px), (max-aspect-ratio:9/10) {
+ .work-slot { --art-height:34dvh; }
+ .work-art { max-width:66vw; }
+ .work-art.art-video { max-width:84vw; max-height:30dvh; }
+ .art-crop { width:min(446px,66vw,calc(var(--art-height) * 446 / 606)); }
+}
+
+/* Small editorial color captions, separate from the artwork's hover transform. */
+.work-labels { position:fixed; inset:0; pointer-events:none; z-index:3; }
+.work-label { position:absolute; right:6vw; top:54%; width:6.5em; display:flex; flex-direction:column; align-items:flex-start; gap:12px; color:#393b36; font:400 clamp(14px,1.35vw,20px)/1.25 'SFMono-Regular',Consolas,'Liberation Mono',monospace; letter-spacing:.09em; text-transform:uppercase; opacity:0; visibility:hidden; transform:translateY(-50%); will-change:opacity,transform; }
+.work-number { font-size:.85em; }
+.work-swatch { display:block; width:28px; height:28px; border-radius:50%; background:var(--swatch); }
+@media(max-width:700px), (max-aspect-ratio:9/10) {
+ .work-label { right:2vw; top:31%; font-size:clamp(9px,2.8vw,11px); width:4.5em; gap:9px; }
+ .work-swatch { width:20px; height:20px; }
+}
+
+/* Welcome lettering is its own reversible scroll chapter after the glass. */
+#intro { position:fixed; left:3vw; top:48%; width:min(50vw,820px); z-index:1; pointer-events:none; opacity:0; visibility:hidden; transform:translateY(-50%); transform-origin:47vw calc(50% + 2dvh); will-change:opacity,transform; }
+#intro img { display:block; width:100%; height:auto; filter:contrast(.76) brightness(1.65); }
+@font-face { font-family:ContactPixel; src:url('./assets/fonts/Silkscreen-Regular.ttf') format('truetype'); font-display:swap; }
+#contact { position:fixed; left:7.5%; top:51%; width:39%; max-width:610px; color:var(--contact-ink,#7c746b); opacity:0; visibility:hidden; transform:translateY(-50%); will-change:opacity,transform; }
+#contact h2 { margin:0 0 26px; font-family:Georgia,'Times New Roman',serif; font-size:clamp(48px,6.3vw,96px); font-weight:700; letter-spacing:-.035em; line-height:1.15; color:var(--contact-heading,#3c3c39); }
+.contact-row { display:grid; grid-template-columns:1fr 2.3fr auto; align-items:center; gap:12px; min-height:52px; border-bottom:1px solid color-mix(in srgb,var(--contact-line,#9a9085) 40%,transparent); }
+.contact-row:first-of-type { border-top:1px solid var(--contact-line,#9a9085); }
+.contact-platform { font-size:clamp(10px,.94vw,15px); }
+.contact-value { font-size:clamp(11px,1.06vw,17px); color:inherit; text-decoration:none; white-space:nowrap; }
+a.contact-value:hover { text-decoration:underline; text-underline-offset:4px; }
+.contact-action { min-width:62px; height:28px; padding:0 8px; border:1px solid var(--contact-line,#9a9085); border-radius:0; background:transparent; color:var(--contact-ink,#7c746b); font:10px ContactPixel,monospace; letter-spacing:1px; }
+a.contact-action { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
+.contact-action:hover:not(:disabled) { background:#fff8e62e; border-color:var(--contact-ink,#7c746b); }
+.contact-action:disabled { opacity:.72; }
+@media(max-width:900px), (max-aspect-ratio:9/10) {
+  #contact { left:7%; top:28%; width:86%; max-width:560px; }
+  #contact h2 { font-size:36px; margin-bottom:20px; }
+  .contact-row { gap:8px; min-height:46px; }
+  .contact-platform { font-size:10px; }
+  .contact-value { font-size:12px; }
+  .contact-action { min-width:50px; height:27px; font-size:9px; padding:0 5px; }
+}
+@media(max-width:700px) {
+  #intro { left:0; top:43%; width:100vw; transform-origin:50vw calc(50% + 7dvh); }
+}
+
+/* 全屏视频播放器（点击视频作品时打开） */
+#video-modal { position:fixed; inset:0; z-index:40; }
+#video-modal[hidden] { display:none; }
+.vm-backdrop { position:absolute; inset:0; background:rgba(20,22,18,.82); backdrop-filter:blur(6px); }
+.vm-stage { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:4dvh 4vw; }
+#vm-video { max-width:min(92vw,1400px); max-height:78dvh; background:#000; border:1.5px solid #f3eedb; box-shadow:6px 6px 0 rgba(243,238,219,.35); }
+#vm-caption { margin:0; color:#f3eedb; font-family:ui-monospace,monospace; font-size:13px; letter-spacing:.12em; text-transform:uppercase; }
+#vm-close { position:absolute; top:22px; right:26px; width:44px; height:44px; border:1.5px solid #f3eedb; border-radius:50%; background:transparent; color:#f3eedb; font-size:17px; line-height:1; cursor:pointer; transition:background .15s,color .15s; }
+#vm-close:hover { background:#f3eedb; color:#141612; }
+
+html.modal-open { overflow:hidden; }
+
+/* 视频作品的悬停提示 */
+.work-slot.has-video .art-video { cursor:pointer; }
+.work-slot.has-video::after {
+  content:"▶ 点击全屏播放"; position:absolute; left:50%; bottom:14px; transform:translateX(-50%);
+  padding:8px 14px; border:1.5px solid #242821; border-radius:22px;
+  background:rgba(243,238,219,.92); color:#242821; font-size:12px; letter-spacing:.08em;
+  box-shadow:3px 3px 0 #242821; white-space:nowrap; pointer-events:none;
+  opacity:0; transition:opacity .2s;
+}
+.work-slot.has-video:hover::after { opacity:1; }
